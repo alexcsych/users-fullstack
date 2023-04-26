@@ -22,3 +22,10 @@ export const USER_VALIDATION_SCHEMA = yup.object({
   gender: yup.string().oneOf(GENDERS),
   userPhoto: yup.mixed(),
 });
+
+export const TASK_VALIDATION_SCHEMA = yup.object({
+  body: yup.string().trim().min(2).max(64).required(),
+  isDone: yup.bool(),
+  deadline: yup.date().min(new Date()),
+  userId: yup.number().min(1).required(),
+});

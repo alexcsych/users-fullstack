@@ -1,8 +1,8 @@
 import './App.css';
-import UserPage from './pages/UserPage';
+import TaskPage from './pages/TaskPage';
 
 function App () {
-  return <UserPage />;
+  return <TaskPage />;
 }
 
 export default App;
