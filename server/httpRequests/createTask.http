@@ -1,0 +1,9 @@
+POST http://localhost:5000/api/tasks
+Content-Type: application/json
+
+{
+  "body":"todo HW",
+  "isDone": true,
+  "deadline":"2023-05-16",
+  "userId":"8"
+}
