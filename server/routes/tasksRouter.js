@@ -7,4 +7,7 @@ tasksRouter
   .route('/')
   .post(tasksController.createTask)
   .get(tasksController.getTasks);
+
+tasksRouter.route('/:taskId').delete(tasksController.deleteTaskById);
+
 module.exports = tasksRouter;

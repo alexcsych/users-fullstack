@@ -27,6 +27,18 @@ export const createTasksThunk = createAsyncThunk(
   }
 );
 
+export const deleteTasksThunk = createAsyncThunk(
+  `${TASKS_SLICE_NAME}/delete`,
+  async (payload, thunkAPI) => {
+    try {
+      await API.deleteTask(payload);
+      return payload;
+    } catch (err) {
+      return thunkAPI.rejectWithValue({ message: err.message });
+    }
+  }
+);
+
 const initialState = {
   tasks: [],
   isFetching: false,
@@ -62,6 +74,19 @@ const tasksSlice = createSlice({
     builder.addCase(createTasksThunk.rejected, (state, action) => {
       state.isFetching = false;
       state.error = action.payload;
+    });
+    // DELETE
+    builder.addCase(deleteTasksThunk.pending, (state, action) => {
+      state.isFetching = true;
+      state.error = null;
+    });
+    builder.addCase(deleteTasksThunk.fulfilled, (state, action) => {
+      state.tasks = state.tasks.filter(t => t.id !== action.payload);
+      state.isFetching = false;
+    });
+    builder.addCase(deleteTasksThunk.rejected, (state, action) => {
+      state.error = action.payload;
+      state.isFetching = false;
     });
   },
 });

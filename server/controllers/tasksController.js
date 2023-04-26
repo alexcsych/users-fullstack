@@ -28,3 +28,44 @@ module.exports.createTask = async (req, res, next) => {
     next(e);
   }
 };
+
+module.exports.deleteTaskById = async (req, res, next) => {
+  const { taskId } = req.params;
+
+  try {
+    const deletedTasksCount = await Task.destroy({ where: { id: taskId } });
+
+    if (!deletedTasksCount) {
+      return next(createError(404, 'Task Not Found'));
+    }
+
+    res.status(204).end();
+  } catch (e) {
+    next(e);
+  }
+};
+
+module.exports.updateTaskById = async (req, res, next) => {
+  const {
+    body,
+    params: { taskId },
+  } = req;
+
+  try {
+    const [, [updatedTask]] = await Task.update(body, {
+      raw: true,
+      where: { id: taskId },
+      returning: true,
+    });
+
+    if (!updatedTask) {
+      return next(createError(404, 'Task Not Found'));
+    }
+
+    const preparedTask = _.omit(updatedTask, ['createdAt', 'updatedAt']);
+
+    res.status(200).send({ data: preparedTask });
+  } catch (e) {
+    next(e);
+  }
+};
